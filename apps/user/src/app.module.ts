@@ -5,7 +5,7 @@ import { envVariableKeys } from '@app/config/env';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '@app/user/auth/auth.controller';
 import { JwtStrategy } from '@app/user/auth/strategy/jwt.strategy';
-import { UserController } from '@app/user/user/user.controller';
+import { UserController } from '@app/user/user/interfaces/controller/user.controller';
 import { UserService } from '@app/user/user/user.service';
 
 @Module({
