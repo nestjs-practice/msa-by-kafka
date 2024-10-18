@@ -6,7 +6,7 @@ import { AuthController } from './controller/auth/auth.controller';
   imports: [
     ClientsModule.register([
       {
-        name: 'AUTH_SERVICE',
+        name: 'USER_SERVICE',
         transport: Transport.KAFKA,
         options: {
           client: {
@@ -23,7 +23,7 @@ import { AuthController } from './controller/auth/auth.controller';
   controllers: [AuthController],
 })
 export class ApiGatewayModule implements OnModuleInit {
-  constructor(@Inject('AUTH_SERVICE') private readonly authClient: ClientKafka) {}
+  constructor(@Inject('USER_SERVICE') private readonly authClient: ClientKafka) {}
 
   async onModuleInit() {
     // * 각 클라이언트가 응답을 받을 수 있도록 설정합니다.

@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from '@app/auth/strategy/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { envVariableKeys } from '@app/config/env';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthController } from '@app/user/auth/auth.controller';
+import { JwtStrategy } from '@app/user/auth/strategy/jwt.strategy';
+import { UserController } from '@app/user/user/user.controller';
+import { UserService } from '@app/user/user/user.service';
 
 @Module({
   imports: [
@@ -33,8 +35,8 @@ import { envVariableKeys } from '@app/config/env';
 
     JwtModule.register({}),
   ],
-  controllers: [AuthController],
-  providers: [JwtStrategy],
+  controllers: [AuthController, UserController],
+  providers: [JwtStrategy, UserService],
   exports: [JwtModule],
 })
-export class AuthModule {}
+export class AppModule {}

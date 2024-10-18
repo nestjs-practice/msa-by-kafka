@@ -5,7 +5,7 @@ import { SignInRequestDto } from '@app/common/dto/auth/sign-in.request.dto';
 @Controller('auth')
 export class AuthController {
   constructor(
-    @Inject('AUTH_SERVICE')
+    @Inject('USER_SERVICE')
     private readonly authClient: ClientKafka,
   ) {}
 
