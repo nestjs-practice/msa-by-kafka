@@ -18,10 +18,16 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": { // * 절대경로 설정
-      "@/*": [
-        "src/*"
-      ]
+    "paths": {
+      "@/*": ["src/*"],
+      "@app/common/*": ["libs/common/src/*"],
+      "@app/utils/*": ["libs/utils/src/*"],
+      "@app/config/*": ["libs/config/src/*"],
+      "@app/api-gateway/*": ["apps/api-gateway/src/*"],
+      "@app/auth/*": ["apps/auth/src/*"],
+      "@app/user/*": ["apps/user/src/*"],
+      "@app/product/*": ["apps/product/src/*"],
+      "@app/order/*": ["apps/order/src/*"],
     }
   }
 }

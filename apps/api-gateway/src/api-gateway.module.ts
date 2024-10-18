@@ -1,5 +1,5 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
-import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientKafka, ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthController } from './controller/auth/auth.controller';
 
 @Module({
@@ -10,67 +10,24 @@ import { AuthController } from './controller/auth/auth.controller';
         transport: Transport.KAFKA,
         options: {
           client: {
-            clientId: 'auth',
+            clientId: 'api-gateway',
             brokers: ['localhost:9092'],
           },
           consumer: {
-            groupId: 'auth-group',
+            groupId: 'api-gateway-consumer-group',
           },
         },
       },
-      // {
-      //   name: 'USER_SERVICE',
-      //   transport: Transport.KAFKA,
-      //   options: {
-      //     client: {
-      //       brokers: ['localhost:9092'],
-      //     },
-      //     consumer: {
-      //       groupId: 'user-group',
-      //     },
-      //   },
-      // },
-      // {
-      //   name: 'ORDER_SERVICE',
-      //   transport: Transport.KAFKA,
-      //   options: {
-      //     client: {
-      //       brokers: ['localhost:9092'],
-      //     },
-      //     consumer: {
-      //       groupId: 'order-group',
-      //     },
-      //   },
-      // },
-      // {
-      //   name: 'PRODUCT_SERVICE',
-      //   transport: Transport.KAFKA,
-      //   options: {
-      //     client: {
-      //       brokers: ['localhost:9092'],
-      //     },
-      //     consumer: {
-      //       groupId: 'product-group',
-      //     },
-      //   },
-      // },
     ]),
   ],
   controllers: [AuthController],
 })
 export class ApiGatewayModule implements OnModuleInit {
-  constructor(
-    @Inject('AUTH_SERVICE') private readonly authClient: ClientProxy,
-    // @Inject('USER_SERVICE') private readonly userClient: ClientProxy,
-    // @Inject('ORDER_SERVICE') private readonly orderClient: ClientProxy,
-    // @Inject('PRODUCT_SERVICE') private readonly productClient: ClientProxy,
-  ) {}
+  constructor(@Inject('AUTH_SERVICE') private readonly authClient: ClientKafka) {}
 
   async onModuleInit() {
     // * 각 클라이언트가 응답을 받을 수 있도록 설정합니다.
+    this.authClient.subscribeToResponseOf('auth_login');
     await this.authClient.connect();
-    // this.userClient.connect();
-    // this.orderClient.connect();
-    // this.productClient.connect();
   }
 }
