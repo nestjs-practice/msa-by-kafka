@@ -1,4 +1,5 @@
 import { ValueObject } from '@app/common/model/value-object.model';
+import bcrypt from 'bcrypt';
 
 type Props = {
   value: string;
@@ -6,8 +7,9 @@ type Props = {
 
 export class UserPassword extends ValueObject<Props> {
   static from(password: string) {
-    // todo : password validate
-    return new UserPassword({ value: password });
+    const hashPassword = bcrypt.hashSync(password, 10);
+
+    return new UserPassword({ value: hashPassword });
   }
 
   getValue() {

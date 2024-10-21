@@ -2,6 +2,7 @@ import { BaseObject } from '@app/common/model/base-object.model';
 import { UserEmail } from '@app/user/user/domain/model/user-email';
 import { UserPassword } from '@app/user/user/domain/model/user-password';
 import { UserName } from '@app/user/user/domain/model/user-name';
+import { SignUpRequestDto } from '@app/common/dto/auth/sign-up.request.dto';
 
 type Props = {
   id?: number;
@@ -13,7 +14,13 @@ type Props = {
 };
 
 export class User extends BaseObject<Props> {
-  static create() {}
+  static new(dto: SignUpRequestDto) {
+    return new User({
+      email: UserEmail.from(dto.email),
+      password: UserPassword.from(dto.password),
+      name: UserName.from(dto.name),
+    });
+  }
 
   static from() {}
 

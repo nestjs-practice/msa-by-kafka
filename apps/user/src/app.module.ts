@@ -9,7 +9,12 @@ import { UserController } from '@app/user/user/interfaces/controller/user.contro
 import { UserEntity } from '@app/user/user/domain/entity/user.entity';
 import { UserRepositoryToken } from '@app/user/user/infrastructure/repository/i.user.repository';
 import { UserRepository } from '@app/user/user/infrastructure/repository/user.repository';
+import { CreateUserHandler } from '@app/user/user/application/command/create-user/create-user.handler';
+import { LoginUserHandler } from '@app/user/user/application/command/login-user/login-user.handler';
+import { JwtTokenService } from '@app/user/auth/jwt/jwt-token.service';
 
+const repositories = [{ provide: UserRepositoryToken, useClass: UserRepository }];
+const handlers = [CreateUserHandler, LoginUserHandler];
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,7 +43,7 @@ import { UserRepository } from '@app/user/user/infrastructure/repository/user.re
     JwtModule.register({}),
   ],
   controllers: [AuthController, UserController],
-  providers: [JwtStrategy, { provide: UserRepositoryToken, useClass: UserRepository }],
+  providers: [JwtStrategy, JwtTokenService, ...handlers, ...repositories],
   exports: [JwtModule],
 })
 export class AppModule {}

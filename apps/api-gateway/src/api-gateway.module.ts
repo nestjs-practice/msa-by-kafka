@@ -26,8 +26,9 @@ export class ApiGatewayModule implements OnModuleInit {
   constructor(@Inject('USER_SERVICE') private readonly authClient: ClientKafka) {}
 
   async onModuleInit() {
-    // * 각 클라이언트가 응답을 받을 수 있도록 설정합니다.
+    // todo: 토픽 목록 중앙화
     this.authClient.subscribeToResponseOf('auth_login');
+    this.authClient.subscribeToResponseOf('auth_register');
     await this.authClient.connect();
   }
 }
