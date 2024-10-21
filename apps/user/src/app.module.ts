@@ -6,7 +6,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '@app/user/auth/auth.controller';
 import { JwtStrategy } from '@app/user/auth/strategy/jwt.strategy';
 import { UserController } from '@app/user/user/interfaces/controller/user.controller';
-import { UserService } from '@app/user/user/user.service';
+import { UserEntity } from '@app/user/user/domain/entity/user.entity';
+import { UserRepositoryToken } from '@app/user/user/infrastructure/repository/i.user.repository';
+import { UserRepository } from '@app/user/user/infrastructure/repository/user.repository';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { UserService } from '@app/user/user/user.service';
         username: configService.get<string>(envVariableKeys.dbUsername),
         password: configService.get<string>(envVariableKeys.dbPassword),
         database: configService.get<string>(envVariableKeys.dbUserDatabase),
-        entities: [],
+        entities: [UserEntity],
         synchronize: configService.get<string>(process.env.NODE_ENV) !== 'production',
         ...(configService.get<string>(process.env.NODE_ENV) === 'production' && {
           ssl: {
@@ -32,11 +34,11 @@ import { UserService } from '@app/user/user/user.service';
       }),
       inject: [ConfigService],
     }),
-
+    TypeOrmModule.forFeature([UserEntity]),
     JwtModule.register({}),
   ],
   controllers: [AuthController, UserController],
-  providers: [JwtStrategy, UserService],
+  providers: [JwtStrategy, { provide: UserRepositoryToken, useClass: UserRepository }],
   exports: [JwtModule],
 })
 export class AppModule {}
