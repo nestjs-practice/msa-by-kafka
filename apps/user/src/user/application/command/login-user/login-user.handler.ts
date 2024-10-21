@@ -21,12 +21,17 @@ export class LoginUserHandler {
 
   async execute(dto: SignInRequestDto) {
     const existUser = await this.userRepository.findOneByEmail(dto.email);
-    console.log(dto);
-    const comparePassword = bcrypt.compareSync(dto.password, existUser.getPassword());
-    console.log(comparePassword);
-    if (!existUser || !comparePassword) {
-      throw new RpcException('Invalid Email or Password');
+
+    if (!existUser) {
+      throw new RpcException('Invalid Email');
     }
+
+    const comparePassword = bcrypt.compareSync(dto.password, existUser.getPassword());
+
+    if (!comparePassword) {
+      throw new RpcException('Invalid Password');
+    }
+
     // * generate token
     const accessToken = await this.jwtTokenService.generateToken(
       existUser.getId()!,

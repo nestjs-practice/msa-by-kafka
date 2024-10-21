@@ -6,7 +6,6 @@ import {
 import { SignUpRequestDto } from '@app/common/dto/auth/sign-up.request.dto';
 import { User } from '@app/user/user/domain/model/user';
 import { RpcException } from '@nestjs/microservices';
-import { JwtTokenService } from '@app/user/auth/jwt/jwt-token.service';
 
 @Injectable()
 export class CreateUserHandler {
